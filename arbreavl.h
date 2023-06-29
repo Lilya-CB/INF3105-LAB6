@@ -230,7 +230,11 @@ void ArbreAVL<T>::vider(Noeud*& noeud)
 template <class T>
 void ArbreAVL<T>::copier(const Noeud* source, Noeud*& noeud) const
 {
-    // À compléter.
+    if(source != nullptr){
+        noeud = new Noeud(source->contenu);
+        copier(source->gauche, noeud->gauche);
+        copier(source->droite, noeud->droite);
+    }
 }
 
 template <class T>
