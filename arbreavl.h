@@ -52,9 +52,12 @@ class ArbreAVL {
     void copier(const Noeud*, Noeud*&) const;
 
     // Fonctions internes pour certains tests
+    const T* rechercher(Noeud* noeud, const T& element) const;
     int hauteur(const Noeud*) const;
     int compter(const Noeud*) const;
     void preparerafficher(const Noeud* n, int profondeur, int& rang, T* elements, int* profondeurs) const;
+    void enlever(Noeud *&noeud, const T& element);
+    ArbreAVL<T>::Noeud * maximum_sous_arbre_gauche(Noeud* node);
 };
 
 
@@ -144,7 +147,7 @@ bool ArbreAVL<T>::inserer(Noeud*& noeud, const T& element)
             if (noeud->equilibre == -1){
                 return true;
             }
-            assert(noeud->equilibre == 2)
+            assert(noeud->equilibre == 2);
             if (noeud->droite->equilibre == -1){
                 rotationGaucheDroite(noeud->droite);
             }
@@ -270,9 +273,14 @@ ArbreAVL<T>& ArbreAVL<T>::operator=(const ArbreAVL& autre) {
 
 // ------ Optionnel Lab 6 -----
 template <class T>
-void ArbreAVL<T>::enlever(const T& element)
+void ArbreAVL<T>::enlever(const T & element) {
+    enlever(racine, element);
+}
+
+template <class T>
+void ArbreAVL<T>::enlever(Noeud*& noeud, const T& element)
 {
-    if( noeud == nullptr){
+    if(noeud == nullptr){
         return;
     }
 
@@ -282,7 +290,7 @@ void ArbreAVL<T>::enlever(const T& element)
         enlever(noeud->droite, element);
     } else {
         if (noeud->gauche != nullptr && noeud->droite != nullptr){
-            Noeud* noeud_maximum = maximum_sous_arbre_gauche(noeu->gauche);
+            Noeud* noeud_maximum = maximum_sous_arbre_gauche(noeud->gauche);
             noeud->contenu = noeud_maximum->contenu;
             enlever(noeud->gauche, noeud_maximum->contenu);
         }else {
@@ -315,7 +323,7 @@ void ArbreAVL<T>::enlever(const T& element)
 }
 
 template<class T>
-typename ArbreAVL<T>::maximum_sous_arbre_gauche(Noeud* node){
+typename ArbreAVL<T>::Noeud* ArbreAVL<T>::maximum_sous_arbre_gauche(Noeud* node){
     while (node->droite != nullptr) {
         node = node->droite;
     }
